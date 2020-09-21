@@ -8,10 +8,18 @@ let Hplot = 0.875 * H
 let bgCanvas, simCanvas, plotCanvas;
 // UI definitions end.
 
+let electron_object_color = 255;
+let electron_object_radius = 5;
+let electron_location_x;
+let electron_location_y = 350;
+
+
+let electrons = [];
  
 // Constant definitions start.
 
 let plancks_constant = (6.626 * Math.pow(10, -34)); // In Joules * Seconds.
+
 let speed_of_light = (299792458); // In Meters / Seconds.
 
 // Constants definitions end.
@@ -22,7 +30,9 @@ let speed_of_light = (299792458); // In Meters / Seconds.
 let light_intensity = 0;
 let light_wavelength = 0; // In nanometers.
 
-// Variable definitions start.
+let number_of_electrons = 20;
+
+// Variable definitions end.
 
 
 // Photoemissive material work function definitions start.
@@ -34,13 +44,16 @@ let surface_Fe = 4.7; // Iron Surface
 let surface_Co = 5; // Cobalt Surface
 let surface_Au = 5.1; // Gold Surface
 
-let selected_surface = 0; // Will add a selection mechanism.
+let selected_surface = surface_Al; // Will add a selection mechanism.
 
 // Photoemissive material work function definitions end.
 
 
 
 function setup() {
+  
+  electron_location_x = random(400, 550);
+  
   bgCanvas = createCanvas(W, H)
   
   simCanvas = createGraphics(Wsim, Hsim)
@@ -67,7 +80,7 @@ function setup() {
   image(simCanvas, 0, 0);
    
 // Selection using the dropdown fucntions will be added here.
-  if(selected_surface = surface_Al){
+  if(selected_surface == surface_Al){
      selected_surface = surface_Al;
      rect(250, 350, 300, 25);
      fill('white');
@@ -97,6 +110,13 @@ function setup() {
     rect(250, 350, 300, 25);
     fill('white');
     }
+   
+   for (i = 0; i < number_of_electrons; i++){
+     electrons[i] = new Electron(electron_location_x, electron_location_y, -5, 5, electron_object_color, electron_object_radius);
+   
+   }
+
+   //console.log(mouseX,mouseY);
   
 } 
 
@@ -134,6 +154,5 @@ function calculate_cutoff_wavelength(){
   return ((plancks_constant * speed_of_light) / (selected_surface))
 
 }
-
 
 
