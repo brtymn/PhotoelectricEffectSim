@@ -15,6 +15,12 @@ let electron_location_y = 350;
 
 
 let electrons = [];
+
+
+
+var num = 2000;
+var noiseScale = 500, noiseStrength=1;
+var photons = [num];
  
 // Constant definitions start.
 
@@ -63,10 +69,18 @@ function setup() {
   plotCanvas.stroke(255)
   plotCanvas.strokeWeight(3)
   plotCanvas.noFill()
-  plotCanvas.rect(0, 0, Wplot, Hplot)}
+  plotCanvas.rect(0, 0, Wplot, Hplot)
 
-
- function draw(){
+  for (let i = 0; i < num; i++) {
+    //x value start slightly outside the right of canvas, z value how close to viewer
+    var loc = createVector(random(100), random(100), 2);
+    var angle = 45; //any value to initialize
+    var dir = createVector(cos(angle), sin(angle));
+    var speed = 2;
+    photons[i]= new Photon(loc, dir, speed);
+  }
+}
+function draw(){
   //border of simCanvas
   simCanvas.clear()
   simCanvas.stroke(255)
@@ -115,11 +129,16 @@ function setup() {
      electrons[i] = new Electron(electron_location_x, electron_location_y, -5, 5, electron_object_color, electron_object_radius);
    
    }
+   
+  fill(0, 10);
+  noStroke();
+  rect(0, 0, width, height);
+  for (let i = 0; i < photons.length; i++) {
+    photons[i].run();
 
-   //console.log(mouseX,mouseY);
   
-} 
-
+  } 
+}
 // Convert wavelength values to frequency.
 function wavelength_to_frequency(){
   
@@ -154,5 +173,3 @@ function calculate_cutoff_wavelength(){
   return ((plancks_constant * speed_of_light) / (selected_surface))
 
 }
-
-
