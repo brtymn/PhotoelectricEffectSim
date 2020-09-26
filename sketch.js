@@ -6,6 +6,8 @@ let Hsim = H
 let Wplot = 0.25 * W
 let Hplot = 0.875 * H 
 let bgCanvas, simCanvas, plotCanvas;
+
+let wavelength_slider;
 // UI definitions end.
 
 let electron_object_color = 255;
@@ -19,7 +21,6 @@ let electrons = [];
 
 
 var num = 2000;
-var noiseScale = 500, noiseStrength=1;
 var photons = [num];
  
 // Constant definitions start.
@@ -34,7 +35,7 @@ let speed_of_light = (299792458); // In Meters / Seconds.
 // Variable definitions start.
 
 let light_intensity = 0;
-let light_wavelength = 0; // In nanometers.
+let light_wavelength; // Tied to a slider.
 
 let number_of_electrons = 20;
 
@@ -54,7 +55,7 @@ let selected_surface = surface_Al; // Will add a selection mechanism.
 
 // Photoemissive material work function definitions end.
 
-
+//wavelength_color = getRGB(light_wavelength);
 
 function setup() {
   
@@ -70,7 +71,15 @@ function setup() {
   plotCanvas.strokeWeight(3)
   plotCanvas.noFill()
   plotCanvas.rect(0, 0, Wplot, Hplot)
-
+  
+  // Slider Definitions Start
+  wavelength_slider = createSlider(380, 780, 30);
+  wavelength_slider.position(500, 10);
+  wavelength_slider.style('width', '80px');
+  // Slider Definitions End
+  
+  
+  // Photon Flow Field Start
   for (let i = 0; i < num; i++) {
     //x value start slightly outside the right of canvas, z value how close to viewer
     var loc = createVector(random(100), random(100), 2);
@@ -79,6 +88,7 @@ function setup() {
     var speed = 2;
     photons[i]= new Photon(loc, dir, speed);
   }
+  // Photon Field Definition End
 }
 function draw(){
   //border of simCanvas
@@ -88,40 +98,44 @@ function draw(){
   simCanvas.noFill()
   simCanvas.rect(10, 10, Wsim - 20, Hsim - 20)
   simCanvas.fill(255);
-  simCanvas.arc(400, 150, 300, 25, PI, TWO_PI);
+  //simCanvas.arc(400, 150, 300, 25, PI, TWO_PI);
   
   //sim canvas
   image(simCanvas, 0, 0);
    
+  // Slider Definitions Start
+  light_wavelength = wavelength_slider.value();
+  // Slider Definitions End
+  
 // Selection using the dropdown fucntions will be added here.
   if(selected_surface == surface_Al){
      selected_surface = surface_Al;
-     rect(250, 350, 300, 25);
+     rect(0 , 470, W * 0.69 , 35);
      fill('white');
      }
   else if(selected_surface == surface_Cr) {
     selected_surface = surface_Cr;
-    rect(250, 350, 300, 25);
+    rect(150, 350, 500, 25);
     fill('white');
     }
   else if(selected_surface == surface_Mn) {
     selected_surface = surface_Mn;
-    rect(250, 350, 300, 25);
+    rect(150, 350, 500, 25);
     fill('white');
     }
   else if(selected_surface == surface_Fe) {
     selected_surface = surface_Fe;
-    rect(250, 350, 300, 25);
+    rect(150, 350, 500, 25);
     fill('white');
     }
   else if(selected_surface == surface_Co) {
     selected_surface = surface_Co;
-    rect(250, 350, 300, 25);
+    rect(150, 350, 500, 25);
     fill('white');
     }
   else if(selected_surface == surface_Au) {
     selected_surface = surface_Au;
-    rect(250, 350, 300, 25);
+    rect(150, 350, 500, 25);
     fill('white');
     }
    
@@ -132,12 +146,14 @@ function draw(){
    
   fill(0, 10);
   noStroke();
-  rect(0, 0, width, height);
+  rect(0, 0, W * 0.69 , height);
   for (let i = 0; i < photons.length; i++) {
     photons[i].run();
 
   
-  } 
+  }
+  
+  
 }
 // Convert wavelength values to frequency.
 function wavelength_to_frequency(){
