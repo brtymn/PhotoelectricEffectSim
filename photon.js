@@ -3,7 +3,7 @@ class Photon{
     this.loc = _loc;
     this.dir = _dir;
     this.speed = _speed;
-  	// var col;
+    var photon_color;
   }
   run() {
     this.move();
@@ -23,12 +23,12 @@ class Photon{
     //float distance = dist(width/2, height/2, loc.x, loc.y);
     //if (distance>150) {
     if (this.loc.x < 0 || this.loc.x > width || this.loc.y < 0 || this.loc.y > height) {    
-      this.loc.x = random(width*1.2);
-      this.loc.y = random(height);
+      this.loc.x = random(100);
+      this.loc.y = random(100);
     }
   }
   update(){
-    fill(255);
+    fill(210);
     ellipse(this.loc.x, this.loc.y, this.loc.z);
   }
 }
