@@ -9,5 +9,10 @@ class Electron {
     
     this.colorr = input_colorr; // Color definition.
     
-  }  
+  }
+  show() {
+
+    noStroke();
+    circle(this.position_vector.x, this.position_vector.y, this.diameter);
+  }
 }
