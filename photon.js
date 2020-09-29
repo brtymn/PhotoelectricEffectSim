@@ -3,7 +3,6 @@ class Photon{
     this.loc = _loc;
     this.dir = _dir;
     this.speed = _speed;
-    var photon_color;
   }
   run() {
     this.move();
@@ -15,20 +14,20 @@ class Photon{
     this.dir.x = cos(angle);
     this.dir.y = sin(angle);
     var vel = this.dir.copy();
-    var d =1;  //direction change 
+    var d =1;  //direction change
     vel.mult(this.speed*d); //vel = vel * (speed*d)
     this.loc.add(vel); //loc = loc + vel
   }
   checkEdges(){
     //float distance = dist(width/2, height/2, loc.x, loc.y);
     //if (distance>150) {
-    if (this.loc.x < 0 || this.loc.x > width || this.loc.y < 0 || this.loc.y > height) {    
+    if (this.loc.x < 0 || this.loc.x > width || this.loc.y < 0 || this.loc.y > height) {
       this.loc.x = random(100);
       this.loc.y = random(100);
     }
   }
   update(){
-    fill(210);
+    fill("red");
     ellipse(this.loc.x, this.loc.y, this.loc.z);
   }
 }
