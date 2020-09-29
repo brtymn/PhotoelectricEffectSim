@@ -1,10 +1,10 @@
 // UI definitions start.
 let W = 1200  //width of bgCanvas
 let H = 500  //height of bgCanvas
-let Wsim = W * 0.69 
+let Wsim = W * 0.69
 let Hsim = H
 let Wplot = 0.25 * W
-let Hplot = 0.875 * H 
+let Hplot = 0.875 * H
 let bgCanvas, simCanvas, plotCanvas;
 
 let wavelength_slider;
@@ -22,7 +22,9 @@ let electrons = [];
 
 var num = 2000;
 var photons = [num];
- 
+let photon_color;
+let photon_color_selector = 0;
+
 // Constant definitions start.
 
 let plancks_constant = (6.626 * Math.pow(10, -34)); // In Joules * Seconds.
@@ -58,37 +60,33 @@ let selected_surface = surface_Al; // Will add a selection mechanism.
 //wavelength_color = getRGB(light_wavelength);
 
 function setup() {
-  
+
   electron_location_x = random(400, 550);
-  
+
   bgCanvas = createCanvas(W, H)
-  
+
   simCanvas = createGraphics(Wsim, Hsim)
-  
+
   plotCanvas = createGraphics(Wplot, Hplot)
   plotCanvas.background(20)
   plotCanvas.stroke(255)
   plotCanvas.strokeWeight(3)
   plotCanvas.noFill()
   plotCanvas.rect(0, 0, Wplot, Hplot)
-  
+
   // Slider Definitions Start
   wavelength_slider = createSlider(380, 780, 30);
   wavelength_slider.position(500, 10);
   wavelength_slider.style('width', '80px');
   // Slider Definitions End
-  
-  
-  // Photon Flow Field Start
-  for (let i = 0; i < num; i++) {
-    //x value start slightly outside the right of canvas, z value how close to viewer
-    var loc = createVector(random(100), random(100), 2);
-    var angle = 45; //any value to initialize
-    var dir = createVector(cos(angle), sin(angle));
-    var speed = 2;
-    photons[i]= new Photon(loc, dir, speed);
-  }
-  // Photon Field Definition End
+
+  ResetPhotons();
+
+  // Button Definitions Start
+  color_reset_button = createButton("Reset Color");
+  color_reset_button.position(100, 100);
+  color_reset_button.mousePressed(ResetColor);
+  // Button Definitions End
 }
 function draw(){
   //border of simCanvas
@@ -99,14 +97,14 @@ function draw(){
   simCanvas.rect(10, 10, Wsim - 20, Hsim - 20)
   simCanvas.fill(255);
   //simCanvas.arc(400, 150, 300, 25, PI, TWO_PI);
-  
+
   //sim canvas
   image(simCanvas, 0, 0);
-   
+
   // Slider Definitions Start
-  light_wavelength = wavelength_slider.value();
+  //light_wavelength = wavelength_slider.value(); // May be useful in the future.
   // Slider Definitions End
-  
+
 // Selection using the dropdown fucntions will be added here.
   if(selected_surface == surface_Al){
      selected_surface = surface_Al;
@@ -138,34 +136,34 @@ function draw(){
     rect(150, 350, 500, 25);
     fill('white');
     }
-   
+
    for (i = 0; i < number_of_electrons; i++){
      electrons[i] = new Electron(electron_location_x, electron_location_y, -5, 5, electron_object_color, electron_object_radius);
-   
+
    }
-   
+
   fill(0, 10);
   noStroke();
   rect(0, 0, W * 0.69 , height);
   for (let i = 0; i < photons.length; i++) {
     photons[i].run();
 
-  
+
   }
-  
-  
+
+
 }
 // Convert wavelength values to frequency.
 function wavelength_to_frequency(){
-  
+
   return (1 / light_wavelength);
-  
+
 }
 
 
 // Calculate energy for each wave packet.
 function calculate_energy(){
-  
+
   let light_frequency = wavelength_to_frequency();
 
   return (plancks_constant * light_frequency);
@@ -177,7 +175,7 @@ function calculate_energy(){
 function calculate_max_kinetic_energy(){
 
   let packet_energy = calculate_energy();
-  
+
   return (packet_energy - selected_work_function);
 
 }
@@ -187,5 +185,21 @@ function calculate_max_kinetic_energy(){
 function calculate_cutoff_wavelength(){
 
   return ((plancks_constant * speed_of_light) / (selected_surface))
+
+}
+
+
+function ResetPhotons(){
+
+  // Photon Flow Field Start
+  for (let i = 0; i < num; i++) {
+    //x value start slightly outside the right of canvas, z value how close to viewer
+    var loc = createVector(random(100), random(100), 2);
+    var angle = 45; //any value to initialize
+    var dir = createVector(cos(angle), sin(angle));
+    var speed = 2;
+    photons[i]= new Photon(loc, dir, speed);
+  }
+  // Photon Flow Field End
 
 }
