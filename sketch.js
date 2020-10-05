@@ -10,18 +10,14 @@ let bgCanvas, simCanvas, plotCanvas;
 let wavelength_slider;
 // UI definitions end.
 
-let electron_object_color = 255;
-let electron_object_radius = 5;
-let electron_location_x;
-let electron_location_y = 350;
 
-
-let electrons = [];
+var number_of_electrons = 1000;
+let electrons = [number_of_electrons];
 
 
 
-var num = 2000;
-var photons = [num];
+var number_of_photons = 2000;
+var photons = [number_of_photons];
 let photon_color;
 let photon_color_selector = 0;
 
@@ -39,7 +35,6 @@ let speed_of_light = (299792458); // In Meters / Seconds.
 let light_intensity = 0;
 let light_wavelength; // Tied to a slider.
 
-let number_of_electrons = 20;
 
 // Variable definitions end.
 
@@ -80,12 +75,14 @@ function setup() {
   wavelength_slider.style('width', '80px');
   // Slider Definitions End
 
-  ResetPhotons();
+
+  PhotonField();
+
 
   // Button Definitions Start
-  color_reset_button = createButton("Reset Color");
+  color_reset_button = createButton("Send Light Pulse");
   color_reset_button.position(100, 100);
-  color_reset_button.mousePressed(ResetColor);
+  color_reset_button.mousePressed(PhotonField);
   // Button Definitions End
 }
 function draw(){
@@ -96,7 +93,7 @@ function draw(){
   simCanvas.noFill()
   simCanvas.rect(10, 10, Wsim - 20, Hsim - 20)
   simCanvas.fill(255);
-  //simCanvas.arc(400, 150, 300, 25, PI, TWO_PI);
+  simCanvas.arc(400, 150, 300, 25, PI, TWO_PI);
 
   //sim canvas
   image(simCanvas, 0, 0);
@@ -137,18 +134,12 @@ function draw(){
     fill('white');
     }
 
-   for (i = 0; i < number_of_electrons; i++){
-     electrons[i] = new Electron(electron_location_x, electron_location_y, -5, 5, electron_object_color, electron_object_radius);
-
-   }
 
   fill(0, 10);
   noStroke();
   rect(0, 0, W * 0.69 , height);
   for (let i = 0; i < photons.length; i++) {
     photons[i].run();
-
-
   }
 
 
@@ -189,17 +180,32 @@ function calculate_cutoff_wavelength(){
 }
 
 
-function ResetPhotons(){
+function PhotonField(){
 
   // Photon Flow Field Start
-  for (let i = 0; i < num; i++) {
+  for (let i = 0; i < number_of_photons; i++) {
     //x value start slightly outside the right of canvas, z value how close to viewer
-    var loc = createVector(random(100), random(100), 2);
-    var angle = 45; //any value to initialize
-    var dir = createVector(cos(angle), sin(angle));
-    var speed = 2;
-    photons[i]= new Photon(loc, dir, speed);
+    var photon_loc = createVector(random(100), random(100), 2);
+    var photon_angle = 45; //any value to initialize
+    var photon_dir = createVector(cos(photon_angle), sin(photon_angle));
+    var photon_speed = 2;
+    photons[i]= new Photon(photon_loc, photon_dir, photon_speed, photon_angle);
   }
   // Photon Flow Field End
+
+}
+
+function ElectronStream(){
+
+  // Photon Flow Field Start
+  for (let j = 0; j < number_of_electrons; j++) {
+    //x value start slightly outside the right of canvas, z value how close to viewer
+    var electron_loc = createVector(random(400, 500), random(400, 500), 2);
+    var electron_angle = 135; //any value to initialize
+    var electron_dir = createVector(cos(electron_angle), sin(electron_angle));
+    var electron_speed = 2;
+    electrons[i]= new Electron(electron_loc, electron_dir, electron_speed, electron_angle);
+  }
+  // Photon Flow Field EndW
 
 }
