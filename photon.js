@@ -1,8 +1,9 @@
 class Photon{
-  constructor(_loc,_dir,_speed){
+  constructor(_loc,_dir,_speed, _angle){
     this.loc = _loc;
     this.dir = _dir;
     this.speed = _speed;
+    this.angle = _angle;
   }
   run() {
     this.move();
@@ -10,11 +11,11 @@ class Photon{
     this.update();
   }
   move(){
-    let angle = PI/4
+    let angle = this.angle;
     this.dir.x = cos(angle);
     this.dir.y = sin(angle);
+    var d = 1;  //direction change
     var vel = this.dir.copy();
-    var d =1;  //direction change
     vel.mult(this.speed*d); //vel = vel * (speed*d)
     this.loc.add(vel); //loc = loc + vel
   }
@@ -22,12 +23,13 @@ class Photon{
     //float distance = dist(width/2, height/2, loc.x, loc.y);
     //if (distance>150) {
     if (this.loc.x < 0 || this.loc.x > width || this.loc.y < 0 || this.loc.y > height) {
-      this.loc.x = random(100);
-      this.loc.y = random(100);
+      return;
+      //this.loc.x = random(400, 500);
+      //this.loc.y = random(400, 500)
     }
   }
   update(){
-    fill("red");
+    fill(255);
     ellipse(this.loc.x, this.loc.y, this.loc.z);
   }
 }
