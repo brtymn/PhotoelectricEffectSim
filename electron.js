@@ -1,18 +1,34 @@
-
-class Electron {
-  constructor(input_x, input_y, input_vx, input_vy, input_colorr, input_diameter) {
-
-    this.position_vector = createVector(input_x, input_y);
-    this.velocity_vector = createVector(input_vx, input_vy);
-    
-    this.diameter = input_diameter; // Diameter definition, may be changed to a slider later on.
-    
-    this.colorr = input_colorr; // Color definition.
-    
+class Electron{
+  constructor(_loc,_dir,_speed, _angle){
+    this.loc = _loc;
+    this.dir = _dir;
+    this.speed = _speed;
+    this.angle = _angle;
   }
-  show() {
-
-    noStroke();
-    circle(this.position_vector.x, this.position_vector.y, this.diameter);
+  run() {
+    this.move();
+    this.checkEdges();
+    this.update();
+  }
+  move(){
+    let angle = this.angle;
+    this.dir.x = cos(angle);
+    this.dir.y = sin(angle);
+    var vel = this.dir.copy();
+    var d =1;  //direction change
+    vel.mult(this.speed*d); //vel = vel * (speed*d)
+    this.loc.add(vel); //loc = loc + vel
+  }
+  checkEdges(){
+    //float distance = dist(width/2, height/2, loc.x, loc.y);
+    //if (distance>150) {
+    if (this.loc.x < 0 || this.loc.x > width || this.loc.y < 0 || this.loc.y > height) {
+      this.loc.x = random(400, 500);
+      this.loc.y = random(400, 500);
+    }
+  }
+  update(){
+    fill(255);
+    ellipse(this.loc.x, this.loc.y, this.loc.z);
   }
 }
